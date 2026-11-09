@@ -7,6 +7,7 @@ services:
       - "5000:5000"  # Optional: Expose for debugging/testing
     volumes:
       - libretranslate_models:/home/libretranslate/.local
+      - /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro
     environment:
       - LT_UPDATE_MODELS=true
       - LT_LOAD_ONLY=en,es,fr,de  # Adjust as needed
