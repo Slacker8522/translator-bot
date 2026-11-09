@@ -1,15 +1,26 @@
-# docker-compose.yml (LibreTranslate part)
 services:
   libretranslate:
     container_name: libretranslate
     image: libretranslate/libretranslate:latest
     restart: unless-stopped
     ports:
-      - "5000:5000"
+      - "5000:5000"  # Optional: Expose for debugging/testing
     volumes:
-      - libretranslate_models:/home/libretranslate/.local  # Persist language models
+      - libretranslate_models:/home/libretranslate/.local
     environment:
-      - LT_UPDATE_MODELS=true  # Download models on first start
-      - LT_LOAD_ONLY=en,es,fr,de  # Optional: Limit languages to load for speed
+      - LT_UPDATE_MODELS=true
+      - LT_LOAD_ONLY=en,es,fr,de  # Adjust as needed
+
+  discord-bot:
+    build: .
+    container_name: discord-translate-bot
+    restart: unless-stopped
+    depends_on:
+      - libretranslate
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - LIBRETRANSLATE_URL=http://libretranslate:5000
+    # No ports needed for the bot itself
+
 volumes:
   libretranslate_models:
