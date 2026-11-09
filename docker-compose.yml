@@ -1,0 +1,15 @@
+# docker-compose.yml (LibreTranslate part)
+services:
+  libretranslate:
+    container_name: libretranslate
+    image: libretranslate/libretranslate:latest
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      - libretranslate_models:/home/libretranslate/.local  # Persist language models
+    environment:
+      - LT_UPDATE_MODELS=true  # Download models on first start
+      - LT_LOAD_ONLY=en,es,fr,de  # Optional: Limit languages to load for speed
+volumes:
+  libretranslate_models:
